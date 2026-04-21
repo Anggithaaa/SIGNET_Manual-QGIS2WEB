@@ -214,9 +214,7 @@ footer{
         <button onclick="setStyle('satellite')">Satellite</button>
     </div>
 
-	<button onclick="window.location.href='index.html'">
-    Lihat Peta QGIS2Web
-	</button>
+	<button onclick="bukaQGIS()">Lihat Peta QGIS</button>
 
     <button onclick="resetTool()">♻ Reset</button>
 
@@ -613,6 +611,11 @@ function setStyle(type){
         loadLayers();
 
     });
+}
+
+// ================= QGIS =================
+function bukaQGIS(){
+    window.location.href = "https://anggithaaa.github.io/SIGNET_Manual-QGIS2WEB/";
 }
 
 </script>
