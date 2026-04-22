@@ -191,6 +191,8 @@ footer{
     </div>
 </div>
 
+<iframe id="mapFrame">
+
 <iframe 
     src="https://anggithaaa.github.io/SIGNET_QGIS2WEB/"
     style="
@@ -242,43 +244,9 @@ footer{
 
 <script>
 
-// ================= TOKEN =================
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5nZ2l0aGFhYSIsImEiOiJjbW5waDZtenIyOGZwMnFwdGd3OGViNnV6In0.kq3mgAfB0XT_mlm5XJmZdQ';
-
-// ================= LOAD GEOJSON =================
-map.on('load', function () {
-    loadLayers();
-});
-
-function loadLayers(){
-
-    // ===== BANGUNAN =====
-    if (!map.getSource('bangunan')){
-        map.addSource('bangunan', {
-            type: 'geojson',
-            data: 'Building_KecBantul_filtered.geojson'
-        });
-
-        map.addLayer({
-            id: 'bangunan-layer',
-            type: 'fill',
-            source: 'bangunan',
-            paint: {
-                'fill-color': [
-                    'match',
-                    ['get', 'jenis'],
-                    'A', '#ff0000',
-                    'B', '#0000ff',
-                    '#aaaaaa'
-                ],
-                'fill-opacity': 0.6
-            }
-        });
-    }
-
-    // ===== BATAS =====
-    if (!.getSource('batas')){
-        .addSource('batas', {
+// ===== BATAS =====
+    if (!map.getSource('batas')){
+        map.addSource('batas', {
             type: 'geojson',
             data: 'Batas_KecBantul.geojson'
         });
@@ -297,7 +265,7 @@ function loadLayers(){
 };
 
 // ================= POPUP =================
-.on('click', 'bangunan-layer', function (e) {
+map.on('click', 'bangunan-layer', function (e) {
 
     var p = e.features[0].properties;
 
@@ -306,17 +274,17 @@ function loadLayers(){
         "Nama: " + (p.nama || "-") + "<br>" +
         "Jenis: " + (p.jenis || "-");
 
-    new boxgl.Popup()
+    new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(isi)
-        .addTo();
+        .addTo(map);
 });
 
 // cursor
-.on('mouseenter', 'bangunan-layer', () => {
+map.on('mouseenter', 'bangunan-layer', () => {
     .getCanvas().style.cursor = 'pointer';
 });
-.on('mouseleave', 'bangunan-layer', () => {
+map.on('mouseleave', 'bangunan-layer', () => {
     .getCanvas().style.cursor = '';
 });
 
@@ -327,50 +295,8 @@ function show(){
     setTimeout(() => map.resize(), 300);
 }
 
-function flyToCenter(){
-    map.flyTo({
-        center: [110.327542,  -7.887432],
-        zoom: 16,
-        duration: 2000
-    });
-}
-
 function kembali() {
     window.location.href = "Minggu 6.html";
-}
-
-function ambilLokasiUser() {
-
-    if (!navigator.geolocation) {
-        alert("Browser tidak support GPS");
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        function(pos){
-
-            let lng = pos.coords.longitude;
-            let lat = pos.coords.latitude;
-
-            map.flyTo({
-                center: [lng, lat],
-                zoom: 17
-            });
-
-            new mapboxgl.Marker({color:'orange'})
-                .setLngLat([lng, lat])
-                .addTo(map);
-
-        },
-        function(err){
-            alert("Gagal ambil lokasi: " + err.message);
-        },
-        {
-            enableHighAccuracy: true,   // 🔥 penting
-            timeout: 10000,
-            maximumAge: 0
-        }
-    );
 }
 
 // ================= MENU =================
@@ -591,31 +517,6 @@ function resetTool() {
 
     document.getElementById("hasilBox").innerHTML = "Hasil: -";
 }
-
-
-function setMode(m){
-    resetTool();
-    mode = m;
-    console.log("MODE:", mode);
-}
-
-// ================= OPSI MAP =================
-function setStyle(type){
-
-    if (type === 'street'){
-        map.setStyle('mapbox://styles/mapbox/streets-v11');
-    }
-
-    if (type === 'satellite'){
-        map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
-    }
-
-    map.once('style.load', function(){
-        loadLayers();
-
-    });
-}
-
 // ================= QGIS =================
 function bukaQGIS(){
     window.location.href = "https://anggithaaa.github.io/SIGNET_Manual-QGIS2WEB";
