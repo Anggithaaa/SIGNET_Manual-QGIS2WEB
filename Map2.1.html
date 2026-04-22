@@ -260,28 +260,6 @@ L.control.layers({
 }).addTo(map);
 
 function resetTool() {
-    mode = null;
-
-    titik = [];
-
-    s.forEach(m => m.remove());
-    s = [];
-
-    if (map.getLayer('garis')) {
-        map.removeLayer('garis');
-        map.removeSource('garis');
-    }
-
-    if (map.getLayer('area')) {
-        map.removeLayer('area');
-        map.removeSource('area');
-    }
-
-    if (map.getLayer('route')) {
-        map.removeLayer('route');
-        map.removeSource('route');
-    }
-
     document.getElementById("hasilBox").innerHTML = "Hasil: -";
 }
 
@@ -290,7 +268,7 @@ function showMap(){
     document.getElementById('mapPage').style.display = 'block';
 
     setTimeout(() => {
-        map.invalidateSize(); // WAJIB buat Leaflet
-    }, 300);
+        map.invalidateSize();
+    }, 500);
 }
 </script>
