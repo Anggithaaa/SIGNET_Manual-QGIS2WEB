@@ -1,5 +1,3 @@
-gaada kok
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -193,6 +191,8 @@ footer{
     </div>
 </div>
 
+<div id="map"></div>
+
 <div class="panel">
 
     <button onclick="toggleMenu('lokasi')">📍</button>
@@ -214,20 +214,16 @@ footer{
         <button onclick="setStyle('satellite')">Satellite</button>
     </div>
 
-	<button onclick="bukaQGIS()">Lihat Peta QGIS</button>
-
     <button onclick="resetTool()">♻ Reset</button>
 
 </div>
-	
+
 <!-- HASIL -->
 <div id="hasilBox">Hasil: -</div>
 
 <footer>
     © IzzaAnggithaAryanawa_117230030
 </footer>
-
-</div>
 
 <script>
 
@@ -613,35 +609,6 @@ function setStyle(type){
         loadLayers();
 
     });
-}
-	
-// ================= BASIC =================
-function showMap(){
-    console.log("klik berhasil");
-    document.getElementById('home').style.display = 'none';
-    document.getElementById('mapPage').style.display = 'block';
-}
-
-function kembali() {
-    document.getElementById('home').style.display = 'flex';
-    document.getElementById('mapPage').style.display = 'none';
-}
-
-function toggleMenu(menu){
-
-    let el = document.getElementById("menu-" + menu);
-
-    let isOpen = el.style.display === "block";
-
-    document.querySelectorAll('.dropdown').forEach(d => d.style.display='none');
-
-    if (!isOpen){
-        el.style.display = "block";
-    }
-}
-
-function resetTool(){
-    document.getElementById("hasilBox").innerHTML = "Hasil: -";
 }
 
 // ================= QGIS =================
