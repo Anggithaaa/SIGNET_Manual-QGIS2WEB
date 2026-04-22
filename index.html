@@ -52,21 +52,7 @@
                 <div id="popup-content"></div>
             </div>
         </div>
-        <button onclick="kembali()" 
-            style="
-            position:absolute;
-            top:10px;
-            left:10px;
-            z-index:9999;
-            padding:8px 12px;
-            background:#0b1f3a;
-            color:white;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-        ">
-        Kembali
-        </button>
+
         <script src="resources/qgis2web_expressions.js"></script>
 <script src="resources/proj4.js"></script>
         <script>proj4.defs('EPSG:4326','+proj=longlat +datum=WGS84 +no_defs');</script>
@@ -79,10 +65,27 @@
         <script src="./layers/layers.js" type="text/javascript"></script> 
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script> 
-        <script>
-        function kembali(){
-            window.location.href = "Map2.1.html";
-        }
-        </script>
+        <button onclick="kembali()" 
+style="
+position:absolute;
+top:10px;
+left:10px;
+z-index:9999;
+padding:8px 12px;
+background:#0b1f3a;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+pointer-events:auto;
+">
+Kembali
+</button>
+
+<script>
+function kembali(){
+    window.location.href = "../Map2.1.html"; // 🔥 pakai ../ kalau beda folder
+}
+</script>
     </body>
 </html>
