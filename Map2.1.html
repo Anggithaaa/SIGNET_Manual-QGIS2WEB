@@ -226,6 +226,12 @@ function toggleMenu(menu){
 
 }
 
+function showMap(){
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('mapPage').style.display = 'block';
+    setTimeout(() => map.invalidateSize(), 300);
+}
+	
 var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
 
 var satelit = L.tileLayer(
@@ -238,9 +244,6 @@ L.control.layers({
 }).addTo(map);
 
 function resetTool(){
-    document.getElementById("hasilBox").innerHTML = "Hasil: -";
-}
-
     document.getElementById("hasilBox").innerHTML = "Hasil: -";
 }
 
