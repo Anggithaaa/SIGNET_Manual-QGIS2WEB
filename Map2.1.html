@@ -208,44 +208,6 @@ function kembali() {
     window.location.href = "Minggu 6.html";
 }
 
-function ambilLokasiUser() {
-
-    if (!navigator.geolocation) {
-        alert("Browser tidak support GPS");
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        function(pos){
-
-            let lng = pos.coords.longitude;
-            let lat = pos.coords.latitude;
-
-            map.flyTo({
-                center: [lng, lat],
-                zoom: 17
-            });
-
-            new mapboxgl.Marker({color:'orange'})
-                .setLngLat([lng, lat])
-                .addTo(map);
-
-        },
-        function(err){
-            alert("Gagal ambil lokasi: " + err.message);
-        },
-        {
-            enableHighAccuracy: true,   // 🔥 penting
-            timeout: 10000,
-            maximumAge: 0
-        }
-    );
-}
-
-map.on('click', function(e){
-    console.log(e.latlng);
-});
-	
 // ================= MENU =================
 function toggleMenu(menu){
 
@@ -264,36 +226,20 @@ function toggleMenu(menu){
 
 }
 
-var osm = L.tileLayer(...);
-var satelit = L.tileLayer(...);
+var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+var satelit = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+);
 
 L.control.layers({
     "Street": osm,
     "Satelit": satelit
 }).addTo(map);
 
-function resetTool() {
-    mode = null;
-
-    titik = [];
-
-    s.forEach(m => m.remove());
-    s = [];
-
-    if (map.getLayer('garis')) {
-        map.removeLayer('garis');
-        map.removeSource('garis');
-    }
-
-    if (map.getLayer('area')) {
-        map.removeLayer('area');
-        map.removeSource('area');
-    }
-
-    if (map.getLayer('route')) {
-        map.removeLayer('route');
-        map.removeSource('route');
-    }
+function resetTool(){
+    document.getElementById("hasilBox").innerHTML = "Hasil: -";
+}
 
     document.getElementById("hasilBox").innerHTML = "Hasil: -";
 }
