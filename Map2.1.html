@@ -241,282 +241,35 @@ footer{
 
 <script>
 
-// ===== BATAS =====
-    if (!map.getSource('batas')){
-        map.addSource('batas', {
-            type: 'geojson',
-            data: 'Batas_KecBantul.geojson'
-        });
-
-        .addLayer({
-            id: 'batas-layer',
-            type: 'line',
-            source: 'batas',
-            paint: {
-                'line-color': '#ff8800',
-                'line-width': 2
-            }
-        });
-    }
-
-};
-
-// ================= POPUP =================
-map.on('click', 'bangunan-layer', function (e) {
-
-    var p = e.features[0].properties;
-
-    var isi =
-        "<b>Info Bangunan</b><br>" +
-        "Nama: " + (p.nama || "-") + "<br>" +
-        "Jenis: " + (p.jenis || "-");
-
-    new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(isi)
-        .addTo(map);
-});
-
-// cursor
-map.on('mouseenter', 'bangunan-layer', () => {
-    .getCanvas().style.cursor = 'pointer';
-});
-map.on('mouseleave', 'bangunan-layer', () => {
-    .getCanvas().style.cursor = '';
-});
-
-// ================= NAVIGASI =================
 function showMap(){
     document.getElementById('home').style.display = 'none';
     document.getElementById('mapPage').style.display = 'block';
-    setTimeout(() => map.resize(), 300);
 }
 
 function kembali() {
-    window.location.href = "Minggu 6.html";
+    document.getElementById('home').style.display = 'flex';
+    document.getElementById('mapPage').style.display = 'none';
 }
 
-// ================= MENU =================
 function toggleMenu(menu){
 
     let el = document.getElementById("menu-" + menu);
 
-    // cek apakah lagi terbuka
     let isOpen = el.style.display === "block";
 
-    // tutup semua dropdown
     document.querySelectorAll('.dropdown').forEach(d => d.style.display='none');
 
-    // kalau sebelumnya TIDAK terbuka → buka
     if (!isOpen){
         el.style.display = "block";
     }
-
 }
 
-// ================= GARIS =================
-function gambarGaris(coords){
-
-    if (map.getSource('garis')){
-        map.getSource('garis').setData({
-            type:'Feature',
-            geometry:{
-                type:'LineString',
-                coordinates: coords
-            }
-        });
-        return;
-    }
-
-    map.addSource('garis',{
-        type:'geojson',
-        data:{
-            type:'Feature',
-            geometry:{
-                type:'LineString',
-                coordinates: coords
-            }
-        }
-    });
-
-    map.addLayer({
-        id:'garis',
-        type:'line',
-        source:'garis',
-        paint:{
-            'line-color':'red',
-            'line-width':3
-        }
-    });
-}
-
-// ================= ROUTING =================
-let mode = null;
-let titik = [];
-let markers = [];
-
-function hitungJarak(){
-
-    if (titik.length < 2) return;
-
-    let dx = titik[1][0] - titik[0][0];
-    let dy = titik[1][1] - titik[0][1];
-
-    let jarak = Math.sqrt(dx*dx + dy*dy) * 111;
-	
-	document.getElementById("hasilBox").innerHTML =
-    "Jarak: " + jarak.toFixed(2) + " km";
-
-    gambarGaris(titik);
-
-}
-
-map.on('contextmenu', function(){
-
-    if (mode != "area" || titik.length < 3) return;
-
-    let polygonCoords = [...titik, titik[0]];
-    let polygon = turf.polygon([polygonCoords]);
-    let luas = turf.area(polygon);
-    let luas_km = luas / 1000000; // jadi km²
-	
-	document.getElementById("hasilBox").innerHTML =
-    "Luas: " + luas_km.toFixed(2) + "km²";
-
-});
-
-map.on('click', function(e){
-
-    if (!mode) return;
-
-    let coord = [e.lngLat.lng, e.lngLat.lat];
-    titik.push(coord);
-
-    let marker = new mapboxgl.Marker({color:'orange'})
-        .setLngLat(coord)
-        .addTo(map);
-
-    markers.push(marker);
-
-    if (mode === "jarak") hitungJarak();
-    if (mode === "area") gambarArea();
-    if (mode === "rute") {
-        if (titik.length == 2){
-            ambilRute(titik[0], titik[1]);
-            mode = null;
-        }
-    }
-
-});
-
-function ambilRute(start, end){
-
-    let url = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
-        + start[0] + ',' + start[1] + ';'
-        + end[0] + ',' + end[1]
-        + '?geometries=geojson&access_token=' + mapboxgl.accessToken;
-
-    fetch(url)
-    .then(res => res.json())
-    .then(data => {
-
-        let route = data.routes[0].geometry;
-
-        if (map.getSource('route')){
-            map.getSource('route').setData(route);
-        } else {
-            map.addSource('route',{
-                type:'geojson',
-                data: route
-            });
-
-            map.addLayer({
-                id:'route',
-                type:'line',
-                source:'route',
-                paint:{
-                    'line-color':'blue',
-                    'line-width':4
-                }
-            });
-        }
-
-        let jarak = (data.routes[0].distance / 1000).toFixed(2);
-		
-		document.getElementById("hasilBox").innerHTML =
-		"Rute: " + jarak + " km";
-
-    });
-}
-
-// ================= AREA =================
-function gambarArea(){
-
-    if (titik.length < 3) return;
-
-    let polygon = [...titik, titik[0]];
-
-    if (map.getSource('area')){
-        map.getSource('area').setData({
-            type:'Feature',
-            geometry:{
-                type:'Polygon',
-                coordinates:[polygon]
-            }
-        });
-        return;
-    }
-
-    map.addSource('area',{
-        type:'geojson',
-        data:{
-            type:'Feature',
-            geometry:{
-                type:'Polygon',
-                coordinates:[polygon]
-            }
-        }
-    });
-
-    map.addLayer({
-        id:'area',
-        type:'fill',
-        source:'area',
-        paint:{
-            'fill-color':'green',
-            'fill-opacity':0.3
-        }
-    });
-}
-
-function resetTool() {
-    mode = null;
-
-    titik = [];
-
-    markers.forEach(m => m.remove());
-    markers = [];
-
-    if (map.getLayer('garis')) {
-        map.removeLayer('garis');
-        map.removeSource('garis');
-    }
-
-    if (map.getLayer('area')) {
-        map.removeLayer('area');
-        map.removeSource('area');
-    }
-
-    if (map.getLayer('route')) {
-        map.removeLayer('route');
-        map.removeSource('route');
-    }
-
+function resetTool(){
     document.getElementById("hasilBox").innerHTML = "Hasil: -";
 }
-// ================= QGIS =================
+
 function bukaQGIS(){
-    window.location.href = "https://anggithaaa.github.io/SIGNET_Manual-QGIS2WEB";
+    window.open("https://anggithaaa.github.io/SIGNET_Manual-QGIS2WEB", "_blank");
 }
 
 </script>
