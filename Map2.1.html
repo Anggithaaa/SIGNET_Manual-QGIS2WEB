@@ -191,10 +191,8 @@ footer{
     </div>
 </div>
 
-<iframe id="mapFrame">
-
 <iframe 
-    src="https://anggithaaa.github.io/SIGNET_QGIS2WEB/"
+    src="https://anggithaaa.github.io/SIGNET_Manual-QGIS2WEB/"
     style="
         position:absolute;
         top:50px;
@@ -204,7 +202,6 @@ footer{
         border:none;
     ">
 </iframe>
-
 
 <div class="panel">
 
@@ -289,7 +286,7 @@ map.on('mouseleave', 'bangunan-layer', () => {
 });
 
 // ================= NAVIGASI =================
-function show(){
+function showMap(){
     document.getElementById('home').style.display = 'none';
     document.getElementById('mapPage').style.display = 'block';
     setTimeout(() => map.resize(), 300);
