@@ -191,7 +191,18 @@ footer{
     </div>
 </div>
 
-<div id="map"></div>
+<iframe 
+    src="https://anggithaaa.github.io/SIGNET_QGIS2WEB/"
+    style="
+        position:absolute;
+        top:50px;
+        bottom:50px;
+        width:100%;
+        height:calc(100% - 100px);
+        border:none;
+    ">
+</iframe>
+
 
 <div class="panel">
 
@@ -221,12 +232,6 @@ footer{
 </div>
 
 <!-- QGIS -->
-<iframe 
-    src="https://anggithaaa.github.io/SIGNET_QGIS2WEB/" 
-    width="100%" 
-    height="600px"
-    style="border:none;">
-</iframe>
 	
 <!-- HASIL -->
 <div id="hasilBox">Hasil: -</div>
@@ -239,16 +244,6 @@ footer{
 
 // ================= TOKEN =================
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5nZ2l0aGFhYSIsImEiOiJjbW5waDZtenIyOGZwMnFwdGd3OGViNnV6In0.kq3mgAfB0XT_mlm5XJmZdQ';
-
-// ================= MAP =================
-var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [110.327542,  -7.887432],
-    zoom: 12
-});
-
-map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
 // ================= LOAD GEOJSON =================
 map.on('load', function () {
@@ -282,13 +277,13 @@ function loadLayers(){
     }
 
     // ===== BATAS =====
-    if (!map.getSource('batas')){
-        map.addSource('batas', {
+    if (!.getSource('batas')){
+        .addSource('batas', {
             type: 'geojson',
             data: 'Batas_KecBantul.geojson'
         });
 
-        map.addLayer({
+        .addLayer({
             id: 'batas-layer',
             type: 'line',
             source: 'batas',
@@ -302,7 +297,7 @@ function loadLayers(){
 };
 
 // ================= POPUP =================
-map.on('click', 'bangunan-layer', function (e) {
+.on('click', 'bangunan-layer', function (e) {
 
     var p = e.features[0].properties;
 
@@ -311,22 +306,22 @@ map.on('click', 'bangunan-layer', function (e) {
         "Nama: " + (p.nama || "-") + "<br>" +
         "Jenis: " + (p.jenis || "-");
 
-    new mapboxgl.Popup()
+    new boxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(isi)
-        .addTo(map);
+        .addTo();
 });
 
 // cursor
-map.on('mouseenter', 'bangunan-layer', () => {
-    map.getCanvas().style.cursor = 'pointer';
+.on('mouseenter', 'bangunan-layer', () => {
+    .getCanvas().style.cursor = 'pointer';
 });
-map.on('mouseleave', 'bangunan-layer', () => {
-    map.getCanvas().style.cursor = '';
+.on('mouseleave', 'bangunan-layer', () => {
+    .getCanvas().style.cursor = '';
 });
 
 // ================= NAVIGASI =================
-function showMap(){
+function show(){
     document.getElementById('home').style.display = 'none';
     document.getElementById('mapPage').style.display = 'block';
     setTimeout(() => map.resize(), 300);
